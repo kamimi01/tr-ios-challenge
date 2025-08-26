@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  movie-app-ios
+//  Movie
 //
 //  Created by mika_admin on 2025-08-26.
 //

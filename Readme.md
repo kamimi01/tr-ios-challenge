@@ -6,6 +6,12 @@
 - iOS 18.3
 - Device: iPhone 16 (Simulator)
 
+## Packages I've used
+
+|Package Name|Why|
+|--|--|
+|[SwiftLint](https://github.com/realm/SwiftLint)|To improve readability and maintenability by enforcing Swift style and conventions.|
+
 ## Goal
 Build a simple movie browser app using **Swift 5+** and **SwiftUI**.  
 Load a list of movies, navigate to a details screen, show recommended movies, and support “likes”.

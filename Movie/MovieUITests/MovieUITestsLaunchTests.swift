@@ -1,13 +1,13 @@
 //
-//  movie_app_iosUITestsLaunchTests.swift
-//  movie-app-iosUITests
+//  MovieUITestsLaunchTests.swift
+//  MovieUITests
 //
 //  Created by mika_admin on 2025-08-26.
 //
 
 import XCTest
 
-final class movie_app_iosUITestsLaunchTests: XCTestCase {
+final class MovieUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

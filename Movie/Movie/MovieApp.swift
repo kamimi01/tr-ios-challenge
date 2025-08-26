@@ -1,6 +1,6 @@
 //
-//  movie_app_iosApp.swift
-//  movie-app-ios
+//  MovieApp.swift
+//  Movie
 //
 //  Created by mika_admin on 2025-08-26.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct movie_app_iosApp: App {
+struct MovieApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

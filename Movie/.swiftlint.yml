@@ -1,0 +1,15 @@
+line_length:
+  warning: 300
+
+function_body_length:
+- 100
+
+type_body_length:
+- 500
+
+disabled_rules:
+- large_tuple
+- trailing_comma
+- vertical_whitespace
+- identifier_name
+- nesting
