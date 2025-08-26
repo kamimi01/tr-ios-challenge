@@ -1,4 +1,11 @@
 # The challenge
+
+## Develpment Environment
+
+- Xcode 16.4
+- iOS 18.3
+- Device: iPhone 16 (Simulator)
+
 ## Goal
 Build a simple movie browser app using **Swift 5+** and **SwiftUI**.  
 Load a list of movies, navigate to a details screen, show recommended movies, and support “likes”.
