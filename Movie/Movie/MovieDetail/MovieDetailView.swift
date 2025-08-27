@@ -48,8 +48,9 @@ private extension MovieDetailView {
                 AsyncImage(url: pictureUrl) { image in
                     image
                         .resizable()
-                        .scaledToFill()
-                        .frame(width: 300, height: 300)
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .frame(width: 300, height: 400)
                 } placeholder: {
                     ProgressView()
                 }
@@ -60,9 +61,8 @@ private extension MovieDetailView {
                     .frame(width: 50, height: 50)
             }
         }
-        .frame(width: 300, height: 300)
+        .frame(width: 300, height: 400)
         .padding(.horizontal, 16)
-        .border(.gray)
         .frame(maxWidth: .infinity)
     }
 

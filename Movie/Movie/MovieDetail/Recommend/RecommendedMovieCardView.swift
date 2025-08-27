@@ -17,7 +17,8 @@ struct RecommendedMovieCardView: View {
                     AsyncImage(url: thumbnailURL) { image in
                         image
                             .resizable()
-                            .scaledToFill()
+                            .scaledToFit()
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
                             .frame(width: 100, height: 100)
                     } placeholder: {
                         ProgressView()

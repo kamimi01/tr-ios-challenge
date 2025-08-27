@@ -17,7 +17,7 @@ struct MovieRowView: View {
                     AsyncImage(url: thumbnailUrl) { image in
                         image
                             .resizable()
-                            .scaledToFill()
+                            .scaledToFit()
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                     } placeholder: {
                         ProgressView()
