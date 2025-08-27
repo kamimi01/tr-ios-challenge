@@ -33,7 +33,10 @@ struct MovieRowView: View {
 
             VStack(alignment: .leading, spacing: 10) {
                 Text(movie.name)
-                Text("(\(movie.year))")
+                    .font(.body)
+                Text(verbatim: "(\(movie.year))")
+                    .font(.caption)
+                    .foregroundStyle(.metaText)
             }
 
             Spacer()

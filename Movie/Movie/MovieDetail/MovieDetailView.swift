@@ -68,6 +68,7 @@ private extension MovieDetailView {
 
     var releaseYear: some View {
         Text(viewModel.releaseDateString())
+            .foregroundStyle(.metaText)
     }
 
     var favorite: some View {
@@ -79,25 +80,26 @@ private extension MovieDetailView {
 
     var rating: some View {
         HStack(spacing: 5) {
-            HStack(spacing: 0) {
-                ForEach(0..<10) { _ in
-                    Image(systemName: "star")
-                }
-            }
+            Image(systemName: "star.fill")
+                .foregroundStyle(.star)
             Text(String(viewModel.detail.rating))
         }
     }
 
     var overview: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 10) {
             Text("Overview")
+                .font(.title)
+                .bold()
             Text(viewModel.detail.description)
         }
     }
 
     var notes: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 10) {
             Text("Notes")
+                .font(.title)
+                .bold()
             Text(viewModel.detail.notes)
         }
     }

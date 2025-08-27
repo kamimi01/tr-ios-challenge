@@ -32,7 +32,11 @@ struct RecommendedMovieCardView: View {
             }
 
             Text(movie.name)
-            Text(verbatim: "\(movie.year)")
+                .font(.body)
+                .foregroundStyle(.bodyText)
+            Text(verbatim: "(\(movie.year))")
+                .font(.caption)
+                .foregroundStyle(.metaText)
         }
     }
 }

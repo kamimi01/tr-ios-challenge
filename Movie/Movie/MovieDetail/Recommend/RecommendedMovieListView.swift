@@ -13,10 +13,13 @@ struct RecommendedMovieListView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("Recommendations")
+                .font(.title)
+                .bold()
             ScrollView(.horizontal) {
                 HStack(spacing: 20) {
                     if movies.isEmpty {
                         Text("No recommendations found")
+                            .foregroundStyle(.metaText)
                     } else {
                         ForEach(movies) { movie in
                             NavigationLink {
