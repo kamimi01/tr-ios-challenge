@@ -67,7 +67,7 @@ private extension MovieDetailView {
     }
 
     var releaseYear: some View {
-        Text(verbatim: "\(viewModel.detail.releaseDate)")
+        Text(viewModel.releaseDateString())
     }
 
     var favorite: some View {

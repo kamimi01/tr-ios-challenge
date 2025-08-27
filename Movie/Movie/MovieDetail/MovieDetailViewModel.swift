@@ -28,6 +28,14 @@ final class MovieDetailViewModel: ObservableObject {
         }
     }
 
+    func releaseDateString() -> String {
+        return DateFormatter.localizedString(
+            from: Date(timeIntervalSince1970: TimeInterval(detail.releaseDate)),
+            dateStyle: .medium,
+            timeStyle: .none
+        )
+    }
+
     private func loadDetail() async throws {
         let detailRequest = MovieAPI.Detail(id: id)
         self.detail = try await client.send(request: detailRequest)
