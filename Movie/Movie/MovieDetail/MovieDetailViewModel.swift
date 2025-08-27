@@ -7,10 +7,23 @@
 
 import Foundation
 
+@MainActor
 final class MovieDetailViewModel: ObservableObject {
     @Published var detail = MovieDetail(id: 0, name: "", description: "", notes: "", rating: 0.0, picture: "", releaseDate: 0)
 
+    private let id: Int
+    private let client = MovieClient()
+
     init(id: Int) {
-        detail = MovieDetail(id: 0, name: "avengers", description: "desc", notes: "notes", rating: 0.0, picture: "https://raw.githubusercontent.com/TradeRev/tr-ios-challenge/master/1.jpg", releaseDate: 0)
+        self.id = id
+    }
+
+    func load() async {
+        do {
+            let request = MovieAPI.Detail(id: id)
+            self.detail = try await client.send(request: request)
+        } catch {
+            // FIXME: show an error
+        }
     }
 }

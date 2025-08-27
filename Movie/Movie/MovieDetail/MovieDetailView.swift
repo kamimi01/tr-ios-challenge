@@ -33,6 +33,11 @@ struct MovieDetailView: View {
         }
         .navigationTitle(viewModel.detail.name)
         .navigationBarTitleDisplayMode(.large)
+        .task {
+            Task {
+                await viewModel.load()
+            }
+        }
     }
 }
 
