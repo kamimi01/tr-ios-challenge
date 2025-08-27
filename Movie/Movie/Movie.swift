@@ -5,7 +5,7 @@
 //  Created by mika_admin on 2025-08-26.
 //
 
-struct Movie: Identifiable {
+struct Movie: Identifiable, Hashable {
     let id: Int
     let name: String
     let thumnail: String

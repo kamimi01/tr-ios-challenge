@@ -11,8 +11,14 @@ struct MovieListView: View {
     @ObservedObject private var viewModel = MovieListViewModel()
 
     var body: some View {
-        List(viewModel.movies) { movie in
-            MovieRowView(movie: movie)
+        NavigationStack {
+            List(viewModel.movies) { movie in
+                NavigationLink {
+                    MovieDetailView()
+                } label: {
+                    MovieRowView(movie: movie)
+                }
+            }
         }
     }
 }
