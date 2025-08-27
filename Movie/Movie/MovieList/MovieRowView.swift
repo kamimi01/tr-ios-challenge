@@ -12,7 +12,7 @@ struct MovieRowView: View {
 
     var body: some View {
         HStack(spacing: 15) {
-            AsyncImage(url: URL(string: movie.thumnail)) { image in
+            AsyncImage(url: URL(string: movie.thumbnail)) { image in
                 image
                     .resizable()
                     .scaledToFill()
@@ -40,5 +40,5 @@ struct MovieRowView: View {
 }
 
 #Preview {
-    MovieRowView(movie: Movie(id: 1, name: "avengers", thumnail: "https://raw.githubusercontent.com/TradeRev/tr-ios-challenge/master/1.jpg", year: 1990))
+    MovieRowView(movie: Movie(id: 1, name: "avengers", thumbnail: "https://raw.githubusercontent.com/TradeRev/tr-ios-challenge/master/1.jpg", year: 1990))
 }

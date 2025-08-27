@@ -14,7 +14,7 @@ struct MovieListView: View {
         NavigationStack {
             List(viewModel.movies) { movie in
                 NavigationLink {
-                    MovieDetailView()
+                    MovieDetailView(movie: movie)
                 } label: {
                     MovieRowView(movie: movie)
                 }
