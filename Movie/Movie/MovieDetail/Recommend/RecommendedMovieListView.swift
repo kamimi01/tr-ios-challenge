@@ -15,8 +15,12 @@ struct RecommendedMovieListView: View {
             Text("Recommendations")
             ScrollView(.horizontal) {
                 HStack(spacing: 20) {
-                    ForEach(movies) { movie in
-                        RecommendedMovieCardView(movie: movie)
+                    if movies.isEmpty {
+                        Text("No recommendations found")
+                    } else {
+                        ForEach(movies) { movie in
+                            RecommendedMovieCardView(movie: movie)
+                        }
                     }
                 }
             }
@@ -26,4 +30,8 @@ struct RecommendedMovieListView: View {
 
 #Preview {
     RecommendedMovieListView(movies: [Movie(id: 1, name: "avengers", thumbnail: "https://raw.githubusercontent.com/TradeRev/tr-ios-challenge/master/1.jpg", year: 1990)])
+}
+
+#Preview {
+    RecommendedMovieListView(movies: [])
 }
