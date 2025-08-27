@@ -12,20 +12,32 @@ struct MovieRowView: View {
 
     var body: some View {
         HStack(spacing: 15) {
-            AsyncImage(url: movie.thumbnailURL) { image in
-                image
-                    .resizable()
-                    .scaledToFill()
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-            } placeholder: {
-                ProgressView()
+            Group {
+                if let thumbnailUrl = URL(string: movie.thumbnail) {
+                    AsyncImage(url: thumbnailUrl) { image in
+                        image
+                            .resizable()
+                            .scaledToFill()
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                    } placeholder: {
+                        ProgressView()
+                    }
+                } else {
+                    Image(systemName: "movieclapper")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 50, height: 50)
+                }
             }
             .frame(width: 80, height: 80)
+
             VStack(alignment: .leading, spacing: 10) {
                 Text(movie.name)
                 Text("(\(movie.year))")
             }
+
             Spacer()
+
             Button(action: {
                 print("heart tapped")
             }, label: {
@@ -40,5 +52,5 @@ struct MovieRowView: View {
 }
 
 #Preview {
-    MovieRowView(movie: Movie(id: 1, name: "avengers", thumbnailURL: URL(string: "https://raw.githubusercontent.com/TradeRev/tr-ios-challenge/master/1.jpg")!, year: 1990))
+    MovieRowView(movie: Movie(id: 1, name: "avengers", thumbnail: "https://raw.githubusercontent.com/TradeRev/tr-ios-challenge/master/1.jpg", year: 1990))
 }

@@ -7,19 +7,33 @@
 
 import Foundation
 
-struct Movie: Identifiable, Hashable {
+struct MovieList: Codable {
+    let movies: [Movie]
+}
+
+struct Movie: Identifiable, Hashable, Codable {
     let id: Int
     let name: String
-    let thumbnailURL: URL?
+    let thumbnail: String
     let year: Int
-    let detail: Detail? = nil
-    let recommendations: [Movie]? = nil
+}
 
-    struct Detail: Equatable, Hashable {
-        let description: String
-        let notes: String
-        let rating: Double
-        let pictureURL: URL?
-        let releaseDate: Int
+struct MovieDetail: Codable {
+    let id: Int
+    let name: String
+    let description: String
+    let notes: String
+    let rating: Double
+    let picture: String
+    let releaseDate: Int
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case description = "Description"
+        case notes = "Notes"
+        case rating = "Rating"
+        case picture
+        case releaseDate
     }
 }

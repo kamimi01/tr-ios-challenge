@@ -14,7 +14,7 @@ struct RecommendedMovieListView: View {
             ScrollView(.horizontal) {
                 HStack(spacing: 20) {
                     ForEach(0..<10) { _ in
-                        RecommendedMovieCardView(movie: Movie(id: 1, name: "Avengers1", thumbnailURL: URL(string: "https://raw.githubusercontent.com/TradeRev/tr-ios-challenge/master/1.jpg")!, year: 2019),)
+                        RecommendedMovieCardView(movie: Movie(id: 1, name: "Avengers1", thumbnail: "https://raw.githubusercontent.com/TradeRev/tr-ios-challenge/master/1.jpg", year: 2019))
                     }
                 }
             }

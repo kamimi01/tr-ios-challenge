@@ -14,13 +14,18 @@ struct MovieListView: View {
         NavigationStack {
             List(viewModel.movies) { movie in
                 NavigationLink {
-                    MovieDetailView(movie: movie)
+                    MovieDetailView(id: movie.id)
                 } label: {
                     MovieRowView(movie: movie)
                 }
             }
             .navigationTitle("Movies")
             .navigationBarTitleDisplayMode(.large)
+        }
+        .task {
+            Task {
+                await viewModel.load()
+            }
         }
     }
 }

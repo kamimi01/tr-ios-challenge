@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct MovieDetailView: View {
-    let movie: Movie
+    @ObservedObject private var viewModel: MovieDetailViewModel
+
+    init(id: Int) {
+        self.viewModel = MovieDetailViewModel(id: id)
+    }
 
     var body: some View {
         ScrollView {
@@ -27,7 +31,7 @@ struct MovieDetailView: View {
             }
             .padding(.horizontal, 16)
         }
-        .navigationTitle(movie.name)
+        .navigationTitle(viewModel.detail.name)
         .navigationBarTitleDisplayMode(.large)
     }
 }
@@ -35,12 +39,14 @@ struct MovieDetailView: View {
 private extension MovieDetailView {
     var picture: some View {
         Group {
-            if let pictureUrl = movie.detail?.pictureURL {
+            if let pictureUrl = URL(string: viewModel.detail.picture) {
                 AsyncImage(url: pictureUrl) { image in
-                    image.image?
+                    image
                         .resizable()
                         .scaledToFill()
                         .frame(width: 300, height: 300)
+                } placeholder: {
+                    ProgressView()
                 }
             } else {
                 Image(systemName: "movieclapper")
@@ -56,7 +62,7 @@ private extension MovieDetailView {
     }
 
     var releaseYear: some View {
-        Text(verbatim: "\(movie.year)")
+        Text(verbatim: "\(viewModel.detail.releaseDate)")
     }
 
     var favorite: some View {
@@ -73,25 +79,25 @@ private extension MovieDetailView {
                     Image(systemName: "star")
                 }
             }
-            Text(String(movie.detail?.rating ?? 0.0))
+            Text(String(viewModel.detail.rating))
         }
     }
 
     var overview: some View {
         VStack(alignment: .leading) {
             Text("Overview")
-            Text(movie.detail?.description ?? "N/A")
+            Text(viewModel.detail.description)
         }
     }
 
     var notes: some View {
         VStack(alignment: .leading) {
             Text("Notes")
-            Text(movie.detail?.notes ?? "N/A")
+            Text(viewModel.detail.notes)
         }
     }
 }
 
 #Preview {
-    MovieDetailView(movie: Movie(id: 1, name: "Avengers1", thumbnailURL: URL(string: "https://raw.githubusercontent.com/TradeRev/tr-ios-challenge/master/1.jpg")!, year: 2019))
+    MovieDetailView(id: 1)
 }
