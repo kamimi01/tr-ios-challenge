@@ -8,13 +8,15 @@
 import SwiftUI
 
 struct RecommendedMovieListView: View {
+    let movies: [Movie]
+
     var body: some View {
         VStack(alignment: .leading) {
             Text("Recommendations")
             ScrollView(.horizontal) {
                 HStack(spacing: 20) {
-                    ForEach(0..<10) { _ in
-                        RecommendedMovieCardView(movie: Movie(id: 1, name: "Avengers1", thumbnail: "https://raw.githubusercontent.com/TradeRev/tr-ios-challenge/master/1.jpg", year: 2019))
+                    ForEach(movies) { movie in
+                        RecommendedMovieCardView(movie: movie)
                     }
                 }
             }
@@ -23,5 +25,5 @@ struct RecommendedMovieListView: View {
 }
 
 #Preview {
-    RecommendedMovieListView()
+    RecommendedMovieListView(movies: [Movie(id: 1, name: "avengers", thumbnail: "https://raw.githubusercontent.com/TradeRev/tr-ios-challenge/master/1.jpg", year: 1990)])
 }

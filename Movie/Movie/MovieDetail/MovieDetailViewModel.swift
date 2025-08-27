@@ -10,6 +10,7 @@ import Foundation
 @MainActor
 final class MovieDetailViewModel: ObservableObject {
     @Published var detail = MovieDetail(id: 0, name: "", description: "", notes: "", rating: 0.0, picture: "", releaseDate: 0)
+    @Published var recommendedMovies: [Movie] = []
 
     private let id: Int
     private let client = MovieClient()
@@ -20,10 +21,21 @@ final class MovieDetailViewModel: ObservableObject {
 
     func load() async {
         do {
-            let request = MovieAPI.Detail(id: id)
-            self.detail = try await client.send(request: request)
+            try await loadDetail()
+            try await loadRecommendedMovie()
         } catch {
             // FIXME: show an error
         }
+    }
+
+    private func loadDetail() async throws {
+        let detailRequest = MovieAPI.Detail(id: id)
+        self.detail = try await client.send(request: detailRequest)
+    }
+
+    private func loadRecommendedMovie() async throws {
+        let recommendedRequest = MovieAPI.Recommend(id: id)
+        let recommendedList = try await client.send(request: recommendedRequest)
+        self.recommendedMovies = recommendedList.movies
     }
 }

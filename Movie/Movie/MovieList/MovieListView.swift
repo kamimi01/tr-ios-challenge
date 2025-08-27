@@ -22,7 +22,7 @@ struct MovieListView: View {
             .navigationTitle("Movies")
             .navigationBarTitleDisplayMode(.large)
         }
-        .task {
+        .onAppear {
             Task {
                 await viewModel.load()
             }

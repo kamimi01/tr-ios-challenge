@@ -26,14 +26,14 @@ struct MovieDetailView: View {
                 rating
                 overview
                 notes
-                RecommendedMovieListView()
+                RecommendedMovieListView(movies: viewModel.recommendedMovies)
                 Spacer()
             }
             .padding(.horizontal, 16)
         }
         .navigationTitle(viewModel.detail.name)
         .navigationBarTitleDisplayMode(.large)
-        .task {
+        .onAppear {
             Task {
                 await viewModel.load()
             }
