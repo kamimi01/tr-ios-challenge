@@ -11,20 +11,22 @@ struct MovieDetailView: View {
     let movie: Movie
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            picture
-            HStack {
-                releaseYear
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                picture
+                HStack {
+                    releaseYear
+                    Spacer()
+                    favorite
+                }
+                rating
+                overview
+                notes
+                RecommendedMovieListView()
                 Spacer()
-                favorite
             }
-            rating
-            overview
-            notes
-            RecommendedMovieListView()
-            Spacer()
+            .padding(.horizontal, 16)
         }
-        .padding(.horizontal, 16)
         .navigationTitle(movie.name)
         .navigationBarTitleDisplayMode(.large)
     }
@@ -33,8 +35,8 @@ struct MovieDetailView: View {
 private extension MovieDetailView {
     var picture: some View {
         Group {
-            if let pictureUrl = movie.detail?.picture {
-                AsyncImage(url: URL(string: pictureUrl)) { image in
+            if let pictureUrl = movie.detail?.pictureURL {
+                AsyncImage(url: pictureUrl) { image in
                     image.image?
                         .resizable()
                         .scaledToFill()
@@ -91,5 +93,5 @@ private extension MovieDetailView {
 }
 
 #Preview {
-    MovieDetailView(movie: Movie(id: 1, name: "Avengers1", thumbnail: "https://raw.githubusercontent.com/TradeRev/tr-ios-challenge/master/1.jpg", year: 2019))
+    MovieDetailView(movie: Movie(id: 1, name: "Avengers1", thumbnailURL: URL(string: "https://raw.githubusercontent.com/TradeRev/tr-ios-challenge/master/1.jpg")!, year: 2019))
 }

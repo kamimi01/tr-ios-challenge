@@ -19,6 +19,8 @@ struct MovieListView: View {
                     MovieRowView(movie: movie)
                 }
             }
+            .navigationTitle("Movies")
+            .navigationBarTitleDisplayMode(.large)
         }
     }
 }
