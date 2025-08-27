@@ -11,32 +11,28 @@ struct RecommendedMovieCardView: View {
     let movie: Movie
 
     var body: some View {
-        Button(action: {
-            print("recommended tapped")
-        }, label: {
-            VStack {
-                Group {
-                    if let thumbnailURL = URL(string: movie.thumbnail) {
-                        AsyncImage(url: thumbnailURL) { image in
-                            image
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 100, height: 100)
-                        } placeholder: {
-                            ProgressView()
-                        }
-                    } else {
-                        Image(systemName: "movieclapper")
+        VStack {
+            Group {
+                if let thumbnailURL = URL(string: movie.thumbnail) {
+                    AsyncImage(url: thumbnailURL) { image in
+                        image
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 50, height: 50)
+                            .frame(width: 100, height: 100)
+                    } placeholder: {
+                        ProgressView()
                     }
+                } else {
+                    Image(systemName: "movieclapper")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 50, height: 50)
                 }
-
-                Text(movie.name)
-                Text(verbatim: "\(movie.year)")
             }
-        })
+
+            Text(movie.name)
+            Text(verbatim: "\(movie.year)")
+        }
     }
 }
 

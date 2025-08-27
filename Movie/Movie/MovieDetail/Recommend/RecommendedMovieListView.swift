@@ -19,7 +19,11 @@ struct RecommendedMovieListView: View {
                         Text("No recommendations found")
                     } else {
                         ForEach(movies) { movie in
-                            RecommendedMovieCardView(movie: movie)
+                            NavigationLink {
+                                MovieDetailView(id: movie.id)
+                            } label: {
+                                RecommendedMovieCardView(movie: movie)
+                            }
                         }
                     }
                 }
