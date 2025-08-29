@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MovieListView: View {
-    @ObservedObject private var viewModel = MovieListViewModel()
+    @StateObject private var viewModel = MovieListViewModel()
 
     var body: some View {
         NavigationStack {

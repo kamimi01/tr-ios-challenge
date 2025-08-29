@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct MovieDetailView: View {
-    @ObservedObject private var viewModel: MovieDetailViewModel
+    @StateObject private var viewModel: MovieDetailViewModel
 
     init(id: Int) {
-        self.viewModel = MovieDetailViewModel(id: id)
+        _viewModel = StateObject(wrappedValue: MovieDetailViewModel(id: id))
     }
 
     var body: some View {

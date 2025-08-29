@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct MovieRowView: View {
-    @ObservedObject private var viewModel: MovieRowViewModel
+    @StateObject private var viewModel: MovieRowViewModel
 
     init(movie: Movie, favoriteMovieIds: [Int]) {
-        viewModel = MovieRowViewModel(movie: movie, favoriteMovieIds: favoriteMovieIds)
+        _viewModel = StateObject(wrappedValue: MovieRowViewModel(movie: movie, favoriteMovieIds: favoriteMovieIds))
     }
 
     var body: some View {
