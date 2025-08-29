@@ -17,11 +17,16 @@ protocol APIRequest {
     var baseURL: URL { get }
     var path: String { get set }
     var method: HttpMethod { get set }
+    var cachePolicy: URLRequest.CachePolicy { get }
 }
 
 extension APIRequest {
     var baseURL: URL {
         URL(string: "https://raw.githubusercontent.com")!
+    }
+
+    var cachePolicy: URLRequest.CachePolicy {
+        .returnCacheDataElseLoad
     }
 
     func buildAPIRequest() throws -> URLRequest {
@@ -31,7 +36,7 @@ extension APIRequest {
         guard let url = components?.url
         else { throw APIRequestError.invalidURL }
 
-        var urlRequest = URLRequest(url: url)
+        var urlRequest = URLRequest(url: url, cachePolicy: cachePolicy)
         urlRequest.httpMethod = method.rawValue
 
         return urlRequest
