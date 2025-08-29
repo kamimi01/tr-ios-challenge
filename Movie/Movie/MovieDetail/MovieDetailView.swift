@@ -55,6 +55,7 @@ struct MovieDetailView: View {
             Task {
                 await viewModel.load()
             }
+            favoriteStore.load()
         }
     }
 }

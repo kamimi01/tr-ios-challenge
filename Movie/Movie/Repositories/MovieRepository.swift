@@ -11,6 +11,9 @@ protocol MovieRepository {
     func fetchMovies() async throws -> [Movie]
     func fetchMovieDetail(id: Int) async throws -> MovieDetail
     func fetchRecommendedMovies(id: Int) async throws -> [Movie]
+    func fetchFavoriteMovieIds() -> [Int]
+    func saveFavoriteMovieId(_ id: Int)
+    func removeFavoriteMovieId(_ id: Int)
 }
 
 final class MovieRepositoryImpl: MovieRepository {
@@ -32,4 +35,26 @@ final class MovieRepositoryImpl: MovieRepository {
         let recommendedList = try await apiClient.send(request: recommendedRequest)
         return recommendedList.movies
     }
+
+    func fetchFavoriteMovieIds() -> [Int] {
+        return UserDefaults.standard.array(forKey: Constants.UserDefaultsKey.favoriteMovies) as? [Int] ?? []
+    }
+
+    func saveFavoriteMovieId(_ id: Int) {
+        var favoriteMovieIds = fetchFavoriteMovieIds()
+        if !favoriteMovieIds.contains(id) {
+            favoriteMovieIds.append(id)
+        }
+        UserDefaults.standard.set(favoriteMovieIds, forKey: Constants.UserDefaultsKey.favoriteMovies)
+    }
+
+    func removeFavoriteMovieId(_ id: Int) {
+        var favoriteMovieIds = fetchFavoriteMovieIds()
+        if let index = favoriteMovieIds.firstIndex(of: id) {
+            favoriteMovieIds.remove(at: index)
+        }
+        UserDefaults.standard.set(favoriteMovieIds, forKey: Constants.UserDefaultsKey.favoriteMovies)
+    }
+
+
 }

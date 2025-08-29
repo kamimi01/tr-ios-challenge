@@ -8,9 +8,11 @@
 import Foundation
 
 final class FavoriteStore: ObservableObject {
-    @Published private(set) var favoriteIds: [Int] = []
+    @Published private var favoriteIds: [Int] = []
+    private let repository: MovieRepository
 
-    init() {
+    init(repository: MovieRepository = MovieRepositoryImpl()) {
+        self.repository = repository
         load()
     }
 
@@ -19,16 +21,18 @@ final class FavoriteStore: ObservableObject {
     }
 
     func toggleFavorite(_ id: Int) {
-        if let index = favoriteIds.firstIndex(of: id) {
-            favoriteIds.remove(at: index)
+        if isFavorite(id) {
+            repository.removeFavoriteMovieId(id)
+            if let index = favoriteIds.firstIndex(of: id) {
+                favoriteIds.remove(at: index)
+            }
         } else {
+            repository.saveFavoriteMovieId(id)
             favoriteIds.append(id)
         }
-
-        UserDefaults.standard.set(favoriteIds, forKey: Constants.UserDefaultsKey.favoriteMovies)
     }
 
     func load() {
-        favoriteIds = UserDefaults.standard.array(forKey: Constants.UserDefaultsKey.favoriteMovies) as? [Int] ?? []
+        favoriteIds = repository.fetchFavoriteMovieIds()
     }
 }
