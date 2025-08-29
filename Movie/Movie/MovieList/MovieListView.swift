@@ -28,6 +28,7 @@ struct MovieListView: View {
                 }
                 favoriteStore.load()
             }
+            .showAlert(isShowing: $viewModel.isShowingAlert, details: viewModel.alertDetails)
         }
     }
 }

@@ -40,6 +40,7 @@ struct MovieDetailView: View {
                 await viewModel.load()
             }
         }
+        .showAlert(isShowing: $viewModel.isShowingAlert, details: viewModel.alertDetails)
     }
 }
 

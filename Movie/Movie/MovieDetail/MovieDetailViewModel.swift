@@ -11,6 +11,8 @@ import Foundation
 final class MovieDetailViewModel: ObservableObject {
     @Published var detail = MovieDetail(id: 0, name: "", description: "", notes: "", rating: 0.0, picture: "", releaseDate: 0)
     @Published var recommendedMovies: [Movie] = []
+    @Published var isShowingAlert: Bool = false
+    @Published private(set) var alertDetails = AlertDetails(title: "", message: "", buttons: [])
 
     let id: Int
     private let client = MovieClient()
@@ -24,7 +26,16 @@ final class MovieDetailViewModel: ObservableObject {
             try await loadDetail()
             try await loadRecommendedMovie()
         } catch {
-            // FIXME: show an error
+            print("error loading movies: \(error)")
+
+            let cancelButton = AlertButton(title: "Cancel", role: .cancel)
+            let retryButton = AlertButton(title: "Retry", role: .destructive) { [weak self] in
+                Task {
+                    await self?.load()
+                }
+            }
+            alertDetails = AlertDetails(title: "Failed to fetch movies. Do you want to retry?", message: "", buttons: [cancelButton, retryButton])
+            isShowingAlert = true
         }
     }
 
