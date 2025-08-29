@@ -51,11 +51,6 @@ final class MovieDetailViewModel: ObservableObject {
     }
 
     func releaseDateString(from releaseDate: Int) -> String {
-        // FIXME: will extract to extension
-        return DateFormatter.localizedString(
-            from: Date(timeIntervalSince1970: TimeInterval(releaseDate)),
-            dateStyle: .medium,
-            timeStyle: .none
-        )
+        return releaseDate.formattedDate(dateStyle: .medium, timeStyle: .none)
     }
 }
