@@ -18,20 +18,22 @@ final class MovieDetailViewModel: ObservableObject {
 
     @Published private(set) var uiState: UIState = .initial
     @Published var isShowingAlert: Bool = false
+
     private(set) var alertDetails = AlertDetails(title: "", message: "", buttons: [])
+    private let repository: MovieRepository
 
     let id: Int
-    private let client = MovieClient()
 
-    init(id: Int) {
+    init(id: Int, repository: MovieRepository = MovieRepositoryImpl()) {
         self.id = id
+        self.repository = repository
     }
 
     func load() async {
         do {
             uiState = .loading
-            let detail = try await loadDetail()
-            let recommended = try await loadRecommendedMovie()
+            let detail = try await repository.fetchMovieDetail(id: id)
+            let recommended = try await repository.fetchRecommendedMovies(id: id)
             uiState = .loaded(detail: detail, recommended: recommended)
         } catch {
             print("error loading movies: \(error)")
@@ -55,16 +57,5 @@ final class MovieDetailViewModel: ObservableObject {
             dateStyle: .medium,
             timeStyle: .none
         )
-    }
-
-    private func loadDetail() async throws -> MovieDetail {
-        let detailRequest = MovieAPI.Detail(id: id)
-        return try await client.send(request: detailRequest)
-    }
-
-    private func loadRecommendedMovie() async throws -> [Movie] {
-        let recommendedRequest = MovieAPI.Recommend(id: id)
-        let recommendedList = try await client.send(request: recommendedRequest)
-        return recommendedList.movies
     }
 }

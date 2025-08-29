@@ -21,16 +21,17 @@ final class MovieListViewModel: ObservableObject {
     private(set) var alertDetails = AlertDetails(title: "", message: "", buttons: [])
 
     private(set) var favoriteMovieIds: [Int] = []
+    private let repository: MovieRepository
 
-    private let client = MovieClient()
+    init(repository: MovieRepository = MovieRepositoryImpl()) {
+        self.repository = repository
+    }
 
     func load() async {
         do {
-            // FIXME: move to repository layer
             uiState = .loading
-            let request = MovieAPI.List()
-            let list = try await client.send(request: request)
-            uiState = .loaded(list.movies)
+            let movies = try await repository.fetchMovies()
+            uiState = .loaded(movies)
         } catch {
             print("error loading movies: \(error)")
             uiState = .error(error)
