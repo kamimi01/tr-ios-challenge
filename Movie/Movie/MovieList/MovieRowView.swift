@@ -8,18 +8,19 @@
 import SwiftUI
 
 struct MovieRowView: View {
-    @StateObject private var viewModel: MovieRowViewModel
     @ObservedObject private var favoriteStore: FavoriteStore
 
+    let movie: Movie
+
     init(movie: Movie, favoriteStore: FavoriteStore) {
-        _viewModel = StateObject(wrappedValue: MovieRowViewModel(movie: movie))
+        self.movie = movie
         self.favoriteStore = favoriteStore
     }
 
     var body: some View {
         HStack(spacing: 15) {
             Group {
-                if let thumbnailUrl = URL(string: viewModel.movie.thumbnail) {
+                if let thumbnailUrl = URL(string: movie.thumbnail) {
                     AsyncImage(url: thumbnailUrl) { image in
                         image
                             .resizable()
@@ -38,9 +39,9 @@ struct MovieRowView: View {
             .frame(width: 80, height: 80)
 
             VStack(alignment: .leading, spacing: 10) {
-                Text(viewModel.movie.name)
+                Text(movie.name)
                     .font(.body)
-                Text(verbatim: "(\(viewModel.movie.year))")
+                Text(verbatim: "(\(movie.year))")
                     .font(.caption)
                     .foregroundStyle(.metaText)
             }
@@ -48,13 +49,13 @@ struct MovieRowView: View {
             Spacer()
 
             Button(action: {
-                favoriteStore.toggleFavorite(viewModel.movie.id)
+                favoriteStore.toggleFavorite(movie.id)
             }, label: {
-                Image(systemName: favoriteStore.isFavorite(viewModel.movie.id) ? "heart.fill" : "heart")
+                Image(systemName: favoriteStore.isFavorite(movie.id) ? "heart.fill" : "heart")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 20, height: 20)
-                    .foregroundStyle(favoriteStore.isFavorite(viewModel.movie.id) ? .heart : .metaText)
+                    .foregroundStyle(favoriteStore.isFavorite(movie.id) ? .heart : .metaText)
             })
             .buttonStyle(.plain)
         }
