@@ -8,12 +8,16 @@
 import SwiftUI
 
 struct MovieRowView: View {
-    let movie: Movie
+    @ObservedObject private var viewModel: MovieRowViewModel
+
+    init(movie: Movie, favoriteMovieIds: [Int]) {
+        viewModel = MovieRowViewModel(movie: movie, favoriteMovieIds: favoriteMovieIds)
+    }
 
     var body: some View {
         HStack(spacing: 15) {
             Group {
-                if let thumbnailUrl = URL(string: movie.thumbnail) {
+                if let thumbnailUrl = URL(string: viewModel.movie.thumbnail) {
                     AsyncImage(url: thumbnailUrl) { image in
                         image
                             .resizable()
@@ -32,9 +36,9 @@ struct MovieRowView: View {
             .frame(width: 80, height: 80)
 
             VStack(alignment: .leading, spacing: 10) {
-                Text(movie.name)
+                Text(viewModel.movie.name)
                     .font(.body)
-                Text(verbatim: "(\(movie.year))")
+                Text(verbatim: "(\(viewModel.movie.year))")
                     .font(.caption)
                     .foregroundStyle(.metaText)
             }
@@ -42,12 +46,20 @@ struct MovieRowView: View {
             Spacer()
 
             Button(action: {
-                print("heart tapped")
+                viewModel.toggleFavorite()
             }, label: {
-                Image(systemName: "heart")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 20, height: 20)
+                if viewModel.isFavorite {
+                    Image(systemName: "heart.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                        .foregroundStyle(.heart)
+                } else {
+                    Image(systemName: "heart")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                }
             })
             .buttonStyle(.plain)
         }
@@ -55,5 +67,5 @@ struct MovieRowView: View {
 }
 
 #Preview {
-    MovieRowView(movie: Movie(id: 1, name: "avengers", thumbnail: "https://raw.githubusercontent.com/TradeRev/tr-ios-challenge/master/1.jpg", year: 1990))
+    MovieRowView(movie: Movie(id: 0, name: "avengers", thumbnail: "", year: 1990), favoriteMovieIds: [])
 }

@@ -16,7 +16,7 @@ struct MovieListView: View {
                 NavigationLink {
                     MovieDetailView(id: movie.id)
                 } label: {
-                    MovieRowView(movie: movie)
+                    MovieRowView(movie: movie, favoriteMovieIds: viewModel.favoriteMovieIds)
                 }
             }
             .navigationTitle("Movies")

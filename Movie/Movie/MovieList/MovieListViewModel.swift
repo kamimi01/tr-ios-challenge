@@ -10,16 +10,24 @@ import Foundation
 @MainActor
 final class MovieListViewModel: ObservableObject {
     @Published var movies: [Movie] = []
+    private(set) var favoriteMovieIds: [Int] = []
 
     private let client = MovieClient()
 
     func load() async {
         do {
+            // FIXME: move to repository layer
             let request = MovieAPI.List()
             let list = try await client.send(request: request)
             self.movies = list.movies
+
+            loadFavoriteMovies()
         } catch {
             // FIXME: show error
         }
+    }
+
+    private func loadFavoriteMovies() {
+        favoriteMovieIds = UserDefaults.standard.value(forKey: Constants.UserDefaultsKey.favoriteMovies) as? [Int] ?? []
     }
 }
