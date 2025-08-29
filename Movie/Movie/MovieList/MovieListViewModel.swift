@@ -9,9 +9,16 @@ import Foundation
 
 @MainActor
 final class MovieListViewModel: ObservableObject {
-    @Published private(set) var movies: [Movie] = []
+    enum UIState {
+        case initial
+        case loading
+        case loaded([Movie])
+        case error(Error)
+    }
+
+    @Published private(set) var uiState: UIState = .initial
     @Published var isShowingAlert: Bool = false
-    @Published private(set) var alertDetails = AlertDetails(title: "", message: "", buttons: [])
+    private(set) var alertDetails = AlertDetails(title: "", message: "", buttons: [])
 
     private(set) var favoriteMovieIds: [Int] = []
 
@@ -20,11 +27,13 @@ final class MovieListViewModel: ObservableObject {
     func load() async {
         do {
             // FIXME: move to repository layer
+            uiState = .loading
             let request = MovieAPI.List()
             let list = try await client.send(request: request)
-            self.movies = list.movies
+            uiState = .loaded(list.movies)
         } catch {
             print("error loading movies: \(error)")
+            uiState = .error(error)
 
             let cancelButton = AlertButton(title: "Cancel", role: .cancel)
             let retryButton = AlertButton(title: "Retry", role: .destructive) { [weak self] in

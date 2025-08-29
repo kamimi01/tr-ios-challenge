@@ -13,11 +13,27 @@ struct MovieListView: View {
 
     var body: some View {
         NavigationStack {
-            List(viewModel.movies) { movie in
-                NavigationLink {
-                    MovieDetailView(id: movie.id, favoriteStore: favoriteStore)
-                } label: {
-                    MovieRowView(movie: movie, favoriteStore: favoriteStore)
+            ZStack {
+                switch viewModel.uiState {
+                case .initial:
+                    ZStack {}
+                case .loading:
+                    ProgressView()
+                case .loaded(let movies):
+                    List(movies) { movie in
+                        NavigationLink {
+                            MovieDetailView(id: movie.id, favoriteStore: favoriteStore)
+                        } label: {
+                            MovieRowView(movie: movie, favoriteStore: favoriteStore)
+                        }
+                    }
+                case .error(let error):
+                    VStack {
+                        Spacer()
+                        Text("Something went wrong")
+                        Spacer()
+                    }
+                    .showAlert(isShowing: $viewModel.isShowingAlert, details: viewModel.alertDetails)
                 }
             }
             .navigationTitle("Movies")
@@ -28,7 +44,6 @@ struct MovieListView: View {
                 }
                 favoriteStore.load()
             }
-            .showAlert(isShowing: $viewModel.isShowingAlert, details: viewModel.alertDetails)
         }
     }
 }

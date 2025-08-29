@@ -17,37 +17,52 @@ struct MovieDetailView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                picture
-                HStack {
-                    releaseYear
-                    Spacer()
-                    favorite
+        ZStack {
+            switch viewModel.uiState {
+            case .initial:
+                ZStack {}
+            case .loading:
+                ProgressView()
+            case .loaded(let detail, let recommended):
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        picture(urlString: detail.picture)
+                        HStack {
+                            releaseYear(releaseDate: detail.releaseDate)
+                            Spacer()
+                            favorite
+                        }
+                        rating(detail.rating)
+                        overview(detail.description)
+                        notes(detail.notes)
+                        RecommendedMovieListView(movies: recommended)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 16)
                 }
-                rating
-                overview
-                notes
-                RecommendedMovieListView(movies: viewModel.recommendedMovies)
-                Spacer()
+                .navigationTitle(detail.name)
+                .navigationBarTitleDisplayMode(.large)
+            case .error(let error):
+                VStack {
+                    Spacer()
+                    Text("Something went wrong")
+                    Spacer()
+                }
+                .showAlert(isShowing: $viewModel.isShowingAlert, details: viewModel.alertDetails)
             }
-            .padding(.horizontal, 16)
         }
-        .navigationTitle(viewModel.detail.name)
-        .navigationBarTitleDisplayMode(.large)
         .onAppear {
             Task {
                 await viewModel.load()
             }
         }
-        .showAlert(isShowing: $viewModel.isShowingAlert, details: viewModel.alertDetails)
     }
 }
 
 private extension MovieDetailView {
-    var picture: some View {
+    func picture(urlString: String) -> some View {
         Group {
-            if let pictureUrl = URL(string: viewModel.detail.picture) {
+            if let pictureUrl = URL(string: urlString) {
                 AsyncImage(url: pictureUrl) { image in
                     image
                         .resizable()
@@ -69,8 +84,8 @@ private extension MovieDetailView {
         .frame(maxWidth: .infinity)
     }
 
-    var releaseYear: some View {
-        Text(viewModel.releaseDateString())
+    func releaseYear(releaseDate: Int) -> some View {
+        Text(viewModel.releaseDateString(from: releaseDate))
             .foregroundStyle(.metaText)
     }
 
@@ -87,29 +102,29 @@ private extension MovieDetailView {
         .buttonStyle(.plain)
     }
 
-    var rating: some View {
+    func rating(_ rating: Double) -> some View {
         HStack(spacing: 5) {
             Image(systemName: "star.fill")
                 .foregroundStyle(.star)
-            Text(String(viewModel.detail.rating))
+            Text(String(rating))
         }
     }
 
-    var overview: some View {
+    func overview(_ description: String) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Overview")
                 .font(.title)
                 .bold()
-            Text(viewModel.detail.description)
+            Text(description)
         }
     }
 
-    var notes: some View {
+    func notes(_ notes: String) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Notes")
                 .font(.title)
                 .bold()
-            Text(viewModel.detail.notes)
+            Text(notes)
         }
     }
 }

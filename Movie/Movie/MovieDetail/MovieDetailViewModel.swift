@@ -9,10 +9,16 @@ import Foundation
 
 @MainActor
 final class MovieDetailViewModel: ObservableObject {
-    @Published var detail = MovieDetail(id: 0, name: "", description: "", notes: "", rating: 0.0, picture: "", releaseDate: 0)
-    @Published var recommendedMovies: [Movie] = []
+    enum UIState {
+        case initial
+        case loading
+        case loaded(detail: MovieDetail, recommended: [Movie])
+        case error(Error)
+    }
+
+    @Published private(set) var uiState: UIState = .initial
     @Published var isShowingAlert: Bool = false
-    @Published private(set) var alertDetails = AlertDetails(title: "", message: "", buttons: [])
+    private(set) var alertDetails = AlertDetails(title: "", message: "", buttons: [])
 
     let id: Int
     private let client = MovieClient()
@@ -23,10 +29,13 @@ final class MovieDetailViewModel: ObservableObject {
 
     func load() async {
         do {
-            try await loadDetail()
-            try await loadRecommendedMovie()
+            uiState = .loading
+            let detail = try await loadDetail()
+            let recommended = try await loadRecommendedMovie()
+            uiState = .loaded(detail: detail, recommended: recommended)
         } catch {
             print("error loading movies: \(error)")
+            uiState = .error(error)
 
             let cancelButton = AlertButton(title: "Cancel", role: .cancel)
             let retryButton = AlertButton(title: "Retry", role: .destructive) { [weak self] in
@@ -39,22 +48,23 @@ final class MovieDetailViewModel: ObservableObject {
         }
     }
 
-    func releaseDateString() -> String {
+    func releaseDateString(from releaseDate: Int) -> String {
+        // FIXME: will extract to extension
         return DateFormatter.localizedString(
-            from: Date(timeIntervalSince1970: TimeInterval(detail.releaseDate)),
+            from: Date(timeIntervalSince1970: TimeInterval(releaseDate)),
             dateStyle: .medium,
             timeStyle: .none
         )
     }
 
-    private func loadDetail() async throws {
+    private func loadDetail() async throws -> MovieDetail {
         let detailRequest = MovieAPI.Detail(id: id)
-        self.detail = try await client.send(request: detailRequest)
+        return try await client.send(request: detailRequest)
     }
 
-    private func loadRecommendedMovie() async throws {
+    private func loadRecommendedMovie() async throws -> [Movie] {
         let recommendedRequest = MovieAPI.Recommend(id: id)
         let recommendedList = try await client.send(request: recommendedRequest)
-        self.recommendedMovies = recommendedList.movies
+        return recommendedList.movies
     }
 }
