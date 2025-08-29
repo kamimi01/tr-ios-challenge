@@ -12,7 +12,7 @@ final class MovieDetailViewModel: ObservableObject {
     @Published var detail = MovieDetail(id: 0, name: "", description: "", notes: "", rating: 0.0, picture: "", releaseDate: 0)
     @Published var recommendedMovies: [Movie] = []
 
-    private let id: Int
+    let id: Int
     private let client = MovieClient()
 
     init(id: Int) {

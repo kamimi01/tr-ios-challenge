@@ -9,9 +9,11 @@ import SwiftUI
 
 struct MovieRowView: View {
     @StateObject private var viewModel: MovieRowViewModel
+    @ObservedObject private var favoriteStore: FavoriteStore
 
-    init(movie: Movie, favoriteMovieIds: [Int]) {
-        _viewModel = StateObject(wrappedValue: MovieRowViewModel(movie: movie, favoriteMovieIds: favoriteMovieIds))
+    init(movie: Movie, favoriteStore: FavoriteStore) {
+        _viewModel = StateObject(wrappedValue: MovieRowViewModel(movie: movie))
+        self.favoriteStore = favoriteStore
     }
 
     var body: some View {
@@ -46,20 +48,13 @@ struct MovieRowView: View {
             Spacer()
 
             Button(action: {
-                viewModel.toggleFavorite()
+                favoriteStore.toggleFavorite(viewModel.movie.id)
             }, label: {
-                if viewModel.isFavorite {
-                    Image(systemName: "heart.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
-                        .foregroundStyle(.heart)
-                } else {
-                    Image(systemName: "heart")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
-                }
+                Image(systemName: favoriteStore.isFavorite(viewModel.movie.id) ? "heart.fill" : "heart")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 20, height: 20)
+                    .foregroundStyle(favoriteStore.isFavorite(viewModel.movie.id) ? .heart : .black)
             })
             .buttonStyle(.plain)
         }
@@ -67,5 +62,5 @@ struct MovieRowView: View {
 }
 
 #Preview {
-    MovieRowView(movie: Movie(id: 0, name: "avengers", thumbnail: "", year: 1990), favoriteMovieIds: [])
+    MovieRowView(movie: Movie(id: 0, name: "avengers", thumbnail: "", year: 1990), favoriteStore: FavoriteStore())
 }

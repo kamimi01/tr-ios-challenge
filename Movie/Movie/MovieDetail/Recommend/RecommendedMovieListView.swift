@@ -23,7 +23,7 @@ struct RecommendedMovieListView: View {
                     } else {
                         ForEach(movies) { movie in
                             NavigationLink {
-                                MovieDetailView(id: movie.id)
+                                MovieDetailView(id: movie.id, favoriteStore: FavoriteStore())
                             } label: {
                                 RecommendedMovieCardView(movie: movie)
                             }

@@ -9,9 +9,11 @@ import SwiftUI
 
 struct MovieDetailView: View {
     @StateObject private var viewModel: MovieDetailViewModel
+    @ObservedObject private var favoriteStore: FavoriteStore
 
-    init(id: Int) {
+    init(id: Int, favoriteStore: FavoriteStore) {
         _viewModel = StateObject(wrappedValue: MovieDetailViewModel(id: id))
+        self.favoriteStore = favoriteStore
     }
 
     var body: some View {
@@ -72,10 +74,16 @@ private extension MovieDetailView {
     }
 
     var favorite: some View {
-        Image(systemName: "heart")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 20, height: 20)
+        Button(action: {
+            favoriteStore.toggleFavorite(viewModel.id)
+        }, label: {
+            Image(systemName: favoriteStore.isFavorite(viewModel.id) ? "heart.fill" : "heart")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 20, height: 20)
+                .foregroundStyle(favoriteStore.isFavorite(viewModel.id) ? .heart : .black)
+        })
+        .buttonStyle(.plain)
     }
 
     var rating: some View {
@@ -106,5 +114,5 @@ private extension MovieDetailView {
 }
 
 #Preview {
-    MovieDetailView(id: 1)
+    MovieDetailView(id: 1, favoriteStore: FavoriteStore())
 }
