@@ -81,7 +81,7 @@ private extension MovieDetailView {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 20, height: 20)
-                .foregroundStyle(favoriteStore.isFavorite(viewModel.id) ? .heart : .black)
+                .foregroundStyle(favoriteStore.isFavorite(viewModel.id) ? .heart : .metaText)
         })
         .buttonStyle(.plain)
     }

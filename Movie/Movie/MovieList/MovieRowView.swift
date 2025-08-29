@@ -54,7 +54,7 @@ struct MovieRowView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 20, height: 20)
-                    .foregroundStyle(favoriteStore.isFavorite(viewModel.movie.id) ? .heart : .black)
+                    .foregroundStyle(favoriteStore.isFavorite(viewModel.movie.id) ? .heart : .metaText)
             })
             .buttonStyle(.plain)
         }
