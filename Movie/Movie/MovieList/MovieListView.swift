@@ -28,19 +28,26 @@ struct MovieListView: View {
                         }
                     }
                 case .error(let error):
-                    VStack {
-                        Spacer()
-                        Text("Something went wrong")
-                        Spacer()
+                    ScrollView {
+                        Text("Something went wrong:\n(\(error)")
+                            .padding(.top, 150)
+                            .frame(maxWidth: .infinity)
+                            .border(.red)
                     }
                     .showAlert(isShowing: $viewModel.isShowingAlert, details: viewModel.alertDetails)
                 }
             }
             .navigationTitle("Movies")
             .navigationBarTitleDisplayMode(.large)
+            .refreshable {
+                Task {
+                    await viewModel.load(isRefresh: true)
+                }
+                favoriteStore.load()
+            }
             .onAppear {
                 Task {
-                    await viewModel.load()
+                    await viewModel.load(isRefresh: false)
                 }
                 favoriteStore.load()
             }

@@ -27,10 +27,10 @@ final class MovieListViewModel: ObservableObject {
         self.repository = repository
     }
 
-    func load() async {
+    func load(isRefresh: Bool) async {
         do {
             uiState = .loading
-            let movies = try await repository.fetchMovies()
+            let movies = try await repository.fetchMovies(cachePolicy: isRefresh ? .reloadRevalidatingCacheData : .returnCacheDataElseLoad)
             uiState = .loaded(movies)
         } catch {
             print("error loading movies: \(error)")
@@ -39,7 +39,7 @@ final class MovieListViewModel: ObservableObject {
             let cancelButton = AlertButton(title: "Cancel", role: .cancel)
             let retryButton = AlertButton(title: "Retry", role: .destructive) { [weak self] in
                 Task {
-                    await self?.load()
+                    await self?.load(isRefresh: isRefresh)
                 }
             }
             alertDetails = AlertDetails(title: "Failed to fetch movies. Do you want to retry?", message: "", buttons: [cancelButton, retryButton])

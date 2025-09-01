@@ -8,9 +8,9 @@
 import Foundation
 
 protocol MovieRepository {
-    func fetchMovies() async throws -> [Movie]
-    func fetchMovieDetail(id: Int) async throws -> MovieDetail
-    func fetchRecommendedMovies(id: Int) async throws -> [Movie]
+    func fetchMovies(cachePolicy: URLRequest.CachePolicy) async throws -> [Movie]
+    func fetchMovieDetail(id: Int, cachePolicy: URLRequest.CachePolicy) async throws -> MovieDetail
+    func fetchRecommendedMovies(id: Int, cachePolicy: URLRequest.CachePolicy) async throws -> [Movie]
     func fetchFavoriteMovieIds() -> [Int]
     func saveFavoriteMovieId(_ id: Int)
     func removeFavoriteMovieId(_ id: Int)
@@ -19,19 +19,19 @@ protocol MovieRepository {
 final class MovieRepositoryImpl: MovieRepository {
     private let apiClient = MovieClient()
 
-    func fetchMovies() async throws -> [Movie] {
-        let request = MovieAPI.List()
+    func fetchMovies(cachePolicy: URLRequest.CachePolicy) async throws -> [Movie] {
+        let request = MovieAPI.List(cachePolicy: cachePolicy)
         let list = try await apiClient.send(request: request)
         return list.movies
     }
 
-    func fetchMovieDetail(id: Int) async throws -> MovieDetail {
-        let detailRequest = MovieAPI.Detail(id: id)
+    func fetchMovieDetail(id: Int, cachePolicy: URLRequest.CachePolicy) async throws -> MovieDetail {
+        let detailRequest = MovieAPI.Detail(id: id, cachePolicy: cachePolicy)
         return try await apiClient.send(request: detailRequest)
     }
 
-    func fetchRecommendedMovies(id: Int) async throws -> [Movie] {
-        let recommendedRequest = MovieAPI.Recommend(id: id)
+    func fetchRecommendedMovies(id: Int, cachePolicy: URLRequest.CachePolicy) async throws -> [Movie] {
+        let recommendedRequest = MovieAPI.Recommend(id: id, cachePolicy: cachePolicy)
         let recommendedList = try await apiClient.send(request: recommendedRequest)
         return recommendedList.movies
     }

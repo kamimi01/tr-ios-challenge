@@ -15,6 +15,11 @@ final class MovieAPI {
 
         var path: String = basePath + "/list.json"
         var method: HttpMethod = .get
+        var cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
+
+        init(cachePolicy: URLRequest.CachePolicy) {
+            self.cachePolicy = cachePolicy
+        }
     }
 
     struct Detail: APIRequest {
@@ -22,9 +27,11 @@ final class MovieAPI {
 
         var path: String = ""
         var method: HttpMethod = .get
+        var cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
 
-        init(id: Int) {
+        init(id: Int, cachePolicy: URLRequest.CachePolicy) {
             path = basePath + "/details/\(id).json"
+            self.cachePolicy = cachePolicy
         }
     }
 
@@ -33,9 +40,11 @@ final class MovieAPI {
 
         var path: String = ""
         var method: HttpMethod = .get
+        var cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
 
-        init(id: Int) {
+        init(id: Int, cachePolicy: URLRequest.CachePolicy) {
             path = basePath + "/details/recommended/\(id).json"
+            self.cachePolicy = cachePolicy
         }
     }
 }

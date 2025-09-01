@@ -17,16 +17,12 @@ protocol APIRequest {
     var baseURL: URL { get }
     var path: String { get set }
     var method: HttpMethod { get set }
-    var cachePolicy: URLRequest.CachePolicy { get }
+    var cachePolicy: URLRequest.CachePolicy { get set }
 }
 
 extension APIRequest {
     var baseURL: URL {
         URL(string: "https://raw.githubusercontent.com")!
-    }
-
-    var cachePolicy: URLRequest.CachePolicy {
-        .returnCacheDataElseLoad
     }
 
     func buildAPIRequest() throws -> URLRequest {
