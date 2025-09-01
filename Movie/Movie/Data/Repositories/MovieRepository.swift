@@ -18,6 +18,7 @@ protocol MovieRepository {
 
 final class MovieRepositoryImpl: MovieRepository {
     private let apiClient = MovieClient()
+    private let favoriteMoviesKey = "favoriteMovies"
 
     func fetchMovies(cachePolicy: URLRequest.CachePolicy) async throws -> [Movie] {
         let request = MovieAPI.List(cachePolicy: cachePolicy)
@@ -37,7 +38,7 @@ final class MovieRepositoryImpl: MovieRepository {
     }
 
     func fetchFavoriteMovieIds() -> [Int] {
-        return UserDefaults.standard.array(forKey: Constants.UserDefaultsKey.favoriteMovies) as? [Int] ?? []
+        return UserDefaults.standard.array(forKey: favoriteMoviesKey) as? [Int] ?? []
     }
 
     func saveFavoriteMovieId(_ id: Int) {
@@ -45,7 +46,7 @@ final class MovieRepositoryImpl: MovieRepository {
         if !favoriteMovieIds.contains(id) {
             favoriteMovieIds.append(id)
         }
-        UserDefaults.standard.set(favoriteMovieIds, forKey: Constants.UserDefaultsKey.favoriteMovies)
+        UserDefaults.standard.set(favoriteMovieIds, forKey: favoriteMoviesKey)
     }
 
     func removeFavoriteMovieId(_ id: Int) {
@@ -53,8 +54,6 @@ final class MovieRepositoryImpl: MovieRepository {
         if let index = favoriteMovieIds.firstIndex(of: id) {
             favoriteMovieIds.remove(at: index)
         }
-        UserDefaults.standard.set(favoriteMovieIds, forKey: Constants.UserDefaultsKey.favoriteMovies)
+        UserDefaults.standard.set(favoriteMovieIds, forKey: favoriteMoviesKey)
     }
-
-
 }
