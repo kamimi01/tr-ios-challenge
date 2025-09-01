@@ -1,0 +1,29 @@
+name: Run CI on main merge
+
+on:
+  push:
+
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+
+    defaults:
+      run:
+        working-directory: Movie
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby (for Fastlane)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
+
+      - name: Install Bundler dependencies
+        run: |
+          gem install bundler
+          bundle install
+
+      - name: Run Tests via Fastlane
+        run: bundle exec fastlane run_unit_tests
