@@ -14,14 +14,22 @@ struct RecommendedMovieCardView: View {
         VStack {
             Group {
                 if let thumbnailURL = URL(string: movie.thumbnail) {
-                    AsyncImage(url: thumbnailURL) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .frame(width: 100, height: 100)
-                    } placeholder: {
-                        ProgressView()
+                    AsyncImage(url: thumbnailURL) { phase in
+                        if let image = phase.image {
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .frame(width: 100, height: 100)
+                        } else if phase.error != nil {
+                            Image(systemName: "exclamationmark.triangle")
+                                .resizable()
+                                .scaledToFill()
+                                .foregroundStyle(.bodyText)
+                                .frame(width: 20, height: 20)
+                        } else {
+                            ProgressView()
+                        }
                     }
                 } else {
                     Image(systemName: "movieclapper")

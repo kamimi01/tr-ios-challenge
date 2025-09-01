@@ -21,13 +21,20 @@ struct MovieRowView: View {
         HStack(spacing: 15) {
             Group {
                 if let thumbnailUrl = URL(string: movie.thumbnail) {
-                    AsyncImage(url: thumbnailUrl) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                    } placeholder: {
-                        ProgressView()
+                    AsyncImage(url: thumbnailUrl) { phase in
+                        if let image = phase.image {
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                        } else if phase.error != nil {
+                            Image(systemName: "exclamationmark.triangle")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 30, height: 30)
+                        } else {
+                            ProgressView()
+                        }
                     }
                 } else {
                     Image(systemName: "movieclapper")

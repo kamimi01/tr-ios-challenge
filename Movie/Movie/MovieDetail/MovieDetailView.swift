@@ -71,14 +71,21 @@ private extension MovieDetailView {
     func picture(urlString: String) -> some View {
         Group {
             if let pictureUrl = URL(string: urlString) {
-                AsyncImage(url: pictureUrl) { image in
-                    image
-                        .resizable()
-                        .scaledToFit()
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .frame(width: 300, height: 400)
-                } placeholder: {
-                    ProgressView()
+                AsyncImage(url: pictureUrl) { phase in
+                    if let image = phase.image {
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .frame(width: 300, height: 400)
+                    } else if phase.error != nil {
+                        Image(systemName: "exclamationmark.triangle")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 50, height: 50)
+                    } else {
+                        ProgressView()
+                    }
                 }
             } else {
                 Image(systemName: "movieclapper")
