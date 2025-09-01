@@ -44,12 +44,12 @@ struct MovieDetailView: View {
                 .navigationBarTitleDisplayMode(.large)
             case .error(let error):
                 ScrollView {
-                    Text("Something went wrong:\n(\(error)")
-                        .padding(.top, 150)
-                        .frame(maxWidth: .infinity)
-                        .border(.red)
+                    ErrorView(errorDescription: error.userMessage, retry: {
+                        Task {
+                            await viewModel.load(isRefresh: false)
+                        }
+                    })
                 }
-                .showAlert(isShowing: $viewModel.isShowingAlert, details: viewModel.alertDetails)
             }
         }
         .refreshable {

@@ -17,9 +17,7 @@ final class MovieDetailViewModel: ObservableObject {
     }
 
     @Published private(set) var uiState: UIState = .initial
-    @Published var isShowingAlert: Bool = false
 
-    private(set) var alertDetails = AlertDetails(title: "", message: "", buttons: [])
     private let repository: MovieRepository
 
     let id: Int
@@ -40,15 +38,6 @@ final class MovieDetailViewModel: ObservableObject {
         } catch {
             print("error loading movies: \(error)")
             uiState = .error(error)
-
-            let cancelButton = AlertButton(title: "Cancel", role: .cancel)
-            let retryButton = AlertButton(title: "Retry", role: .destructive) { [weak self] in
-                Task {
-                    await self?.load(isRefresh: isRefresh)
-                }
-            }
-            alertDetails = AlertDetails(title: "Failed to fetch movies. Do you want to retry?", message: "", buttons: [cancelButton, retryButton])
-            isShowingAlert = true
         }
     }
 

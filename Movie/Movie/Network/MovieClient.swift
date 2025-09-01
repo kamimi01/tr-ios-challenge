@@ -9,6 +9,8 @@ import Foundation
 
 enum MovieClientError: Error {
     case connectionFailed
+    case badRequest
+    case badServerResponse
     case unexpectedResponse(statusCode: Int)
 }
 
@@ -38,7 +40,14 @@ final class MovieClient {
             throw MovieClientError.connectionFailed
         }
 
-        if !(200...299).contains(statusCode) {
+        switch statusCode {
+        case 200...299:
+            print("Fetched successfully")
+        case 400...499:
+            throw MovieClientError.badRequest
+        case 500...599:
+            throw MovieClientError.badServerResponse
+        default:
             throw MovieClientError.unexpectedResponse(statusCode: statusCode)
         }
     }
