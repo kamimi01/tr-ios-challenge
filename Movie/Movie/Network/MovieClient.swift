@@ -18,7 +18,7 @@ final class MovieClient {
         return URLSession(configuration: config)
     }()
 
-    private let decorder: JSONDecoder = {
+    private let decoder: JSONDecoder = {
         var decoder = JSONDecoder()
         return decoder
     }()
@@ -30,7 +30,7 @@ final class MovieClient {
 
         try validate(data: data, response: response)
 
-        return try decorder.decode(Request.Response.self, from: data)
+        return try decoder.decode(Request.Response.self, from: data)
     }
 
     private func validate(data: Data, response: URLResponse) throws {
